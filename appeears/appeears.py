@@ -124,6 +124,22 @@ def layers_from_parser(args):
     layers(pid=args.pid)
 
 
+def delete(tid):
+    token = tokenizer()
+    response = requests.delete(
+        f'https://appeears.earthdatacloud.nasa.gov/api/task/{tid}',
+        headers={"Authorization": f"Bearer {token}"})
+    if response.status_code in error_codes.keys():
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
+    elif response.status_code == 204:
+        print(f'Task with task id {tid} deleted')
+
+
+def delete_from_parser(args):
+    delete(tid=args.tid)
+
+
 # get task status for all tasks and groupby status
 def task_all(status):
     token = tokenizer()
@@ -370,6 +386,15 @@ def main(args=None):
         "--status", help="Task status processing|done|pending", default=None
     )
     parser_taskinfo.set_defaults(func=taskinfo_from_parser)
+
+    parser_delete = subparsers.add_parser(
+        "delete", help="Delete a specific task with task ID"
+    )
+    required_named = parser_delete.add_argument_group(
+        "Required named arguments.")
+    required_named.add_argument(
+        "--tid", help="Task ID to delete", required=True)
+    parser_delete.set_defaults(func=delete_from_parser)
 
     parser_download = subparsers.add_parser(
         "download", help="Download all files for specific task with task ID"
