@@ -71,16 +71,19 @@ def tokenizer():
         "https://appeears.earthdatacloud.nasa.gov/api/login", auth=(username, pwd)
     )
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     token_response = response.json()
     return token_response["token"]
 
 
 # get product list
 def products(keyword):
-    response = requests.get("https://appeears.earthdatacloud.nasa.gov/api/product")
+    response = requests.get(
+        "https://appeears.earthdatacloud.nasa.gov/api/product")
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     product_response = response.json()
     products = {p["ProductAndVersion"]: p for p in product_response}
     if keyword is not None:
@@ -90,7 +93,8 @@ def products(keyword):
                 (str(k).lower(), str(v).lower()) for k, v in product_dict.items()
             )
             if keyword.lower() in uniform_product_dict.values():
-                product_dict["product_id"] = product_dict.pop("ProductAndVersion")
+                product_dict["product_id"] = product_dict.pop(
+                    "ProductAndVersion")
                 print(json.dumps(product_dict, indent=2))
     else:
         for product in products:
@@ -109,7 +113,8 @@ def layers(pid):
         f"https://appeears.earthdatacloud.nasa.gov/api/product/{pid}"
     )
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     layer_response = response.json()
     for layer in layer_response:
         print(layer)
@@ -127,7 +132,8 @@ def task_all(status):
         headers={"Authorization": f"Bearer {token}"},
     )
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     status_response = response.json()
     if len(status_response) != 0:
         task_list = []
@@ -183,7 +189,8 @@ def task_status(tid, status):
             headers={"Authorization": f"Bearer {token}"},
         )
         if response.status_code in error_codes.keys():
-            sys.exit(error_codes.get(response.status_code))
+            print(error_codes.get(response.status_code))
+            sys.exit(response.json()['message'])
         if response.status_code == 200:
             status_response = response.json()
             if (
@@ -197,7 +204,8 @@ def task_status(tid, status):
                     headers={"Authorization": f"Bearer {token}"},
                 )
                 if response.status_code in error_codes.keys():
-                    sys.exit(error_codes.get(response.status_code))
+                    print(error_codes.get(response.status_code))
+                    sys.exit(response.json()['message'])
                 task_response = response.json()
                 if len(task_response) != 0:
                     for task in task_response:
@@ -231,7 +239,8 @@ def task_status(tid, status):
                             headers={"Authorization": f"Bearer {token}"},
                         )
                         if response.status_code in error_codes.keys():
-                            sys.exit(error_codes.get(response.status_code))
+                            print(error_codes.get(response.status_code))
+                            sys.exit(response.json()['message'])
                         task_json = response.json()
                         for key, value in task_json.items():
                             if key == "progress":
@@ -257,7 +266,8 @@ def file_bundle(tid):
         headers={"Authorization": f"Bearer {token}"},
     )
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     bundle_response = response.json()
     file_size_total = []
     file_id_list = []
@@ -265,7 +275,8 @@ def file_bundle(tid):
         file_id_list.append({file["file_id"]: file["file_name"]})
         file_size_total.append(file["file_size"])
     print(
-        "Estimated Download Size for order: {}".format(humansize(sum(file_size_total)))
+        "Estimated Download Size for order: {}".format(
+            humansize(sum(file_size_total)))
     )
     return natsorted(file_id_list)
 
@@ -279,7 +290,8 @@ def download_task(tid, dest_dir):
         headers={"Authorization": f"Bearer {token}"},
     )
     if response.status_code in error_codes.keys():
-        sys.exit(error_codes.get(response.status_code))
+        print(error_codes.get(response.status_code))
+        sys.exit(response.json()['message'])
     if response.status_code == 200:
         if "status" in response.json().keys():
             file_id_list = file_bundle(tid)
@@ -299,13 +311,15 @@ def download_task(tid, dest_dir):
                         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
                         if not os.path.exists(filepath):
-                            print(f"Downloading {i} of {len(file_id_list)}: {filename}")
+                            print(
+                                f"Downloading {i} of {len(file_id_list)}: {filename}")
                             with open(filepath, "wb") as f:
                                 for data in response.iter_content(chunk_size=8192):
                                     f.write(data)
                             i = i + 1
                         else:
-                            print(f"File {filename} already exists. Skipping download")
+                            print(
+                                f"File {filename} already exists. Skipping download")
                             i = i + 1
         else:
             print(f"Task {tid} has not completed processing. Skipping download")
@@ -316,7 +330,8 @@ def download_from_parser(args):
 
 
 def main(args=None):
-    parser = argparse.ArgumentParser(description="Simple CLI for NASA AppEEARS API")
+    parser = argparse.ArgumentParser(
+        description="Simple CLI for NASA AppEEARS API")
     subparsers = parser.add_subparsers()
 
     parser_auth = subparsers.add_parser(
@@ -327,7 +342,8 @@ def main(args=None):
     parser_products = subparsers.add_parser(
         "products", help="Print product list for all products or keyword match"
     )
-    optional_named = parser_products.add_argument_group("Optional named arguments")
+    optional_named = parser_products.add_argument_group(
+        "Optional named arguments")
     optional_named.add_argument(
         "--keyword", help="Pass product keyword for example ecostress", default=None
     )
@@ -336,7 +352,8 @@ def main(args=None):
     parser_layers = subparsers.add_parser(
         "layers", help="Print layer list for product with Product ID"
     )
-    required_named = parser_layers.add_argument_group("Required named arguments.")
+    required_named = parser_layers.add_argument_group(
+        "Required named arguments.")
     required_named.add_argument(
         "--pid", help="Product ID from products tool", required=True
     )
@@ -346,7 +363,8 @@ def main(args=None):
         "taskinfo",
         help="Get task information for all tasks or specific tasks or task status type",
     )
-    optional_named = parser_taskinfo.add_argument_group("Optional named arguments")
+    optional_named = parser_taskinfo.add_argument_group(
+        "Optional named arguments")
     optional_named.add_argument("--tid", help="Task ID", default=None)
     optional_named.add_argument(
         "--status", help="Task status processing|done|pending", default=None
@@ -356,8 +374,10 @@ def main(args=None):
     parser_download = subparsers.add_parser(
         "download", help="Download all files for specific task with task ID"
     )
-    required_named = parser_download.add_argument_group("Required named arguments.")
-    required_named.add_argument("--tid", help="Task ID to download", required=True)
+    required_named = parser_download.add_argument_group(
+        "Required named arguments.")
+    required_named.add_argument(
+        "--tid", help="Task ID to download", required=True)
     required_named.add_argument(
         "--dest", help="Full path to destination directory", required=True
     )
