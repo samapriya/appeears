@@ -124,6 +124,19 @@ def layers_from_parser(args):
     layers(pid=args.pid)
 
 
+# get spatial projection info
+def spatial():
+    response = requests.get(
+        'https://appeears.earthdatacloud.nasa.gov/api/spatial/proj')
+    proj_response = response.json()
+    print(json.dumps(proj_response, indent=2))
+
+
+def spatial_from_parser(args):
+    spatial()
+
+
+# delete task using task id
 def delete(tid):
     token = tokenizer()
     response = requests.delete(
@@ -374,6 +387,11 @@ def main(args=None):
         "--pid", help="Product ID from products tool", required=True
     )
     parser_layers.set_defaults(func=layers_from_parser)
+
+    parser_spatial = subparsers.add_parser(
+        "spatial", help="List all supported spatial projections"
+    )
+    parser_spatial.set_defaults(func=spatial_from_parser)
 
     parser_taskinfo = subparsers.add_parser(
         "taskinfo",
