@@ -9,7 +9,7 @@ def readme():
 
 setuptools.setup(
     name="appeears",
-    version="0.0.2",
+    version="0.0.3",
     packages=find_packages(),
     url="https://github.com/samapriya/appeears",
     install_requires=[
@@ -26,7 +26,7 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "Natural Language :: English",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
