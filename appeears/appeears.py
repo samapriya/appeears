@@ -104,7 +104,7 @@ def humansize(nbytes):
 # set credentials
 def auth():
     home = expanduser("~/appeears.json")
-    usr = input("Enter email: ")
+    usr = input("Enter username: ")
     pwd = getpass.getpass("Enter password: ")
     data = {"username": usr, "password": pwd}
     with open(home, "w") as outfile:
@@ -277,6 +277,8 @@ def tasksubmit(**kwargs):
             payload["params"]["dates"][0]["endDate"] = str(value)
         if key == "recurring":
             payload["params"]["dates"][0]["recurring"] = bool(value)
+        if key == "projection":
+            payload["params"]["output"]["projection"] = str(value)
         if key == "product":
             response = requests.get(
                 f"https://appeears.earthdatacloud.nasa.gov/api/product/{value}"
@@ -308,6 +310,7 @@ def tasksubmit_from_parser(args):
         start=args.start,
         end=args.end,
         recurring=args.recurring,
+        projection=args.projection,
         input=args.geometry,
     )
 
@@ -591,6 +594,9 @@ def main(args=None):
     )
     optional_named = parser_tasksubmit.add_argument_group(
         "Optional named arguments")
+    optional_named.add_argument(
+        "--projection", help="Spatial projection", default="geographic"
+    )
     optional_named.add_argument(
         "--recurring", help="Date range recurring True|False", default=False
     )
