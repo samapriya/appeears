@@ -17,6 +17,7 @@ setuptools.setup(
         "requests >= 2.28.1",
         "natsort >= 8.1.0",
         "beautifulsoup4>=4.11.1",
+        "tabulate >= 0.8.9",
         "PyGeoj==1.0.0"
     ],
     license="Apache 2.0",

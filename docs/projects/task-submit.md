@@ -1,19 +1,29 @@
-# Site information
+# Task submit
 
-The site info tool uses the site ID to get detailed information about the setup, location, time zone, status information to name a few. Historical means are dropped along with admin data for ease of parsing and since they do not add a large amount of value for general purpose users directly. The user does have the option to get to the complete admin or historical data if needed
+The task submit tool allows you to pass a multipoint or a polygon geometry geojson to create a task order. The tool is capable of parsing geometries and for now only support GeoJSON files. It does have the capability to select the layers of choice, projection systems and additional parameters as needed. There are a list of required and optional parameters.
 
-![site-info](https://user-images.githubusercontent.com/6677629/145769759-9c09dab3-4b45-472a-a62c-2d327ea2255c.gif)
+![appeears_task-submit](https://user-images.githubusercontent.com/6677629/196683996-599fbcc0-efd1-44f8-ad39-1fdac6fdb9c5.gif)
 
 ```
-pyaqua site-info -h
-usage: pyaqua site-info [-h] --sid SID [--extra EXTRA]
+appeears task-submit -h
+usage: appeears task-submit [-h] --name NAME --product PRODUCT --geometry GEOMETRY --start START --end END
+                            [--index INDEX [INDEX ...]] [--projection PROJECTION] [--recurring RECURRING]
 
 optional arguments:
-  -h, --help     show this help message and exit
+  -h, --help            show this help message and exit
 
 Required named arguments.:
-  --sid SID      Site ID
+  --name NAME           Task name
+  --product PRODUCT     Product ID returned from product tool
+  --geometry GEOMETRY   Full path to geometry.geojson file point or single polygon
+  --start START         Start date in format YYYY-MM-DD
+  --end END             End date in format YYYY-MM-DD
 
 Optional named arguments:
-  --extra EXTRA  extra info keywords : historical/admins
+  --index INDEX [INDEX ...]
+                        space separated index of layers for task
+  --projection PROJECTION
+                        Spatial projection
+  --recurring RECURRING
+                        Date range recurring True|False
 ```

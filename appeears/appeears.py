@@ -14,6 +14,7 @@ import pygeoj
 import requests
 from bs4 import BeautifulSoup
 from natsort import natsorted
+from tabulate import tabulate
 from tqdm import tqdm
 
 
@@ -109,6 +110,7 @@ def auth():
     data = {"username": usr, "password": pwd}
     with open(home, "w") as outfile:
         json.dump(data, outfile)
+    print('Authentication credentials saved')
 
 
 def auth_from_parser(args):
@@ -178,8 +180,18 @@ def layers(pid):
         print(error_codes.get(response.status_code))
         sys.exit(response.json()["message"])
     layer_response = response.json()
+    print(f'Layers for product id {pid}'+'\n')
+    layer_list = []
+    i = 1
     for layer in layer_response:
-        print(layer)
+        lyr = {
+            "Index": i,
+            "Layer": layer
+        }
+        layer_list.append(lyr)
+        i = i+1
+    print(tabulate(layer_list, headers="keys", tablefmt="heavy_grid"))
+    # print(layer)
 
 
 def layers_from_parser(args):
@@ -289,7 +301,15 @@ def tasksubmit(**kwargs):
                 layer_json = {"layer": layer, "product": value}
                 layer_list.append(layer_json)
             payload["params"]["layers"] = layer_list
-    # print(json.dumps(payload, indent=2))
+        if key == 'index' and value is not None:
+            index_list = [x-1 for x in value]
+            l_index = []
+            for i in index_list:
+                l_index.append(payload["params"]["layers"][i])
+            if len(l_index) != 0:
+                payload["params"]["layers"] = l_index
+
+    #print(json.dumps(payload, indent=2))
 
     response = requests.post(
         "https://appeears.earthdatacloud.nasa.gov/api/task",
@@ -311,6 +331,7 @@ def tasksubmit_from_parser(args):
         end=args.end,
         recurring=args.recurring,
         projection=args.projection,
+        index=args.index,
         input=args.geometry,
     )
 
@@ -594,6 +615,11 @@ def main(args=None):
     )
     optional_named = parser_tasksubmit.add_argument_group(
         "Optional named arguments")
+
+    nargs = '+'
+    optional_named.add_argument(
+        "--index", help="space separated index of layers for task", nargs='+', type=int, default=None
+    )
     optional_named.add_argument(
         "--projection", help="Spatial projection", default="geographic"
     )

@@ -4,20 +4,20 @@ This assumes that you have native python & pip installed in your system, you can
 
 ```python``` and then ```pip list```
 
-**pyaqua only support Python v3.7 or higher**
+**appeears only support Python v3.7 or higher**
 
-To install **pyaqua: Simple CLI for Aqualink API** you can install using two methods.
+To install **appeears: Simple CLI for NASA AppEEARS API** you can install using two methods.
 
-```pip install pyaqua```
+```pip install appeears```
 
 or you can also try
 
 ```
-git clone https://github.com/samapriya/pyaqua.git
-cd pyaqua
+git clone https://github.com/samapriya/appeears.git
+cd appeears
 python setup.py install
 ```
-For Linux use sudo or try ```pip install pyaqua --user```.
+For Linux use sudo or try ```pip install appeears --user```.
 
 I recommend installation within a virtual environment. Find more information on [creating virtual environments here](https://docs.python.org/3/library/venv.html).
 
@@ -26,20 +26,25 @@ I recommend installation within a virtual environment. Find more information on 
 As usual, to print help:
 
 ```
-usage: pyaqua [-h] {site-list,site-live,site-daily,site-timeseries} ...
+appeears -h
+usage: appeears [-h] {auth,products,layers,spatial,task-submit,task-info,delete,download} ...
 
-Simple CLI for Aqualink API
+Simple CLI for NASA AppEEARS API
 
 positional arguments:
-  {site-list,site-info,site-live,site-daily,site-timeseries}
-    site-list           Print lists of Site Name and ID with spotters
-    site-info           Print detailed information for a site
-    site-live           Get most recent/live info from a site
-    site-daily          Print daily data info for a site
-    site-timeseries     Exports timeseries data for a site
+  {auth,products,layers,spatial,task-submit,task-info,delete,download}
+    auth                Set username and password for authentication
+    products            Print product list for all products or keyword match
+    layers              Print layer list for product with Product ID
+    spatial             List all supported spatial projections
+    task-submit         Submit your task
+    task-info           Get task information for all tasks or specific tasks or task status type
+    delete              Delete a specific task with task ID
+    download            Download all files for specific task with task ID
 
 optional arguments:
   -h, --help            show this help message and exit
+
 ```
 
-To obtain help for specific functionality, simply call it with _help_ switch, e.g.: `pyaqua site-live -h`. If you didn't install pyaqua, then you can run it just by going to *pyaqua* directory and running `python pyaqua.py [arguments go here]`
+To obtain help for specific functionality, simply call it with _help_ switch, e.g.: `appears task-info -h`. If you didn't install appeears, then you can run it just by going to *appeears* directory and running `python appeears.py [arguments go here]`
