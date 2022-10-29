@@ -6,6 +6,8 @@
 ![PyPI - License](https://img.shields.io/pypi/l/appeears)
 ![PyPI](https://img.shields.io/pypi/v/appeears)
 [![Downloads](https://pepy.tech/badge/appeears/month)](https://pepy.tech/project/appeears)
+[![Donate](https://img.shields.io/badge/Donate-Buy%20me%20a%20Chai-teal)](https://www.buymeacoffee.com/samapriya)
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/samapriya)
 
 The Application for Extracting and Exploring Analysis Ready Samples (AppEEARS) offers a simple and efficient way to access and transform geospatial data from a variety of federal data archives. AppEEARS enables users to subset geospatial datasets using spatial, temporal, and band/layer parameters. Two types of sample requests are available: point samples for geographic coordinates and area samples for spatial areas via vector polygons. Sample requests submitted to AppEEARS provide users not only with data values but also associated quality data values.
 
